@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: ./ops/docker/dockerfile
+      args:
+        NPM_ACCESS_TOKEN: ${NPM_ACCESS_TOKEN:-}
+    container_name: world-brief-dev
+    volumes:
+      - .:/world-brief/app
+      - /world-brief/app/node_modules
+      - /world-brief/app/packages/functions/daily_news_summary/venv
+    working_dir: /world-brief/app
+    environment:
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+      - NPM_ACCESS_TOKEN=${NPM_ACCESS_TOKEN:-}
+    stdin_open: true
+    tty: true
+    networks:
+      - world-brief-network
+
+  api:
+    build:
+      context: .
+      dockerfile: ./ops/docker/Dockerfile.api
+    container_name: world-brief-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./packages:/world-brief/app/packages
+    working_dir: /world-brief/app
+    environment:
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - BEDROCK_MODEL_ID=${BEDROCK_MODEL_ID:-amazon.nova-lite-v1:0}
+      - NO_BEDROCK=${NO_BEDROCK:-false}
+    command: uvicorn packages.api.normalize_api:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - world-brief-network
+
+networks:
+  world-brief-network:
+    driver: bridge
+

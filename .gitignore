@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+.terraform.lock.hcl
+*.zip
+**/build_daily_news/
+
+# Environment & secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

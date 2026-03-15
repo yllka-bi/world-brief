@@ -1,0 +1,12 @@
+variable "aws_account_id" {}
+variable "aws_region" {}
+variable "enable_nat_gateway" {}
+variable "environment" {}
+variable "kb_oss_collection_name" {}
+variable "log_retention" {}
+variable "map_migrated_tag" {}
+variable "project_name" {}
+variable "provider_type" {}
+variable "repository_branch" {}
+variable "retention_in_days" {}
+variable "terraform_state_bucket" {}
