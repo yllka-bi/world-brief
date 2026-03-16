@@ -14,8 +14,8 @@ import json
 from unittest.mock import Mock, patch
 from lambda_function import DailyNewsSummary
 
-# Set ScraperAPI key
-SCRAPERAPI_KEY = "4885066dcb0246dac9ad43fd1d6f9d92"
+# Set ScraperAPI key — read from environment, never hardcode
+SCRAPERAPI_KEY = os.getenv('SCRAPERAPI_KEY', '')
 
 # Mock Comprehend responses
 def mock_comprehend_detect_sentiment(Text, LanguageCode='en'):
@@ -172,8 +172,8 @@ def test_full_pipeline_with_real_data():
                     print("   - Fetching full article text (using ScraperAPI)...")
                     print("   - Analyzing with mocked Comprehend...\n")
                     
-                    articles_by_category = news_summary.process_articles(test_articles)
-                    
+                    articles_by_category, all_entities, _ = news_summary._process_articles(test_articles)
+
                     total_processed = sum(len(arts) for arts in articles_by_category.values())
                     print(f"   ✓ Processed {total_processed} articles into {len(articles_by_category)} categories\n")
                     
@@ -193,7 +193,9 @@ def test_full_pipeline_with_real_data():
                     # Step 3: Generate email content
                     print("\n" + "=" * 70)
                     print("Step 3: Generating email content...")
-                    html_content, text_content = news_summary.generate_email_content(articles_by_category)
+                    html_content, text_content = news_summary._generate_email_content(
+                        articles_by_category, all_entities, [], ''
+                    )
                     print(f"   ✓ Generated HTML email ({len(html_content)} chars)")
                     print(f"   ✓ Generated plain text email ({len(text_content)} chars)\n")
                     
@@ -209,7 +211,7 @@ def test_full_pipeline_with_real_data():
                     
                     # Step 5: Test email sending (mocked)
                     print("Step 5: Testing email sending (mocked - won't send real email)...")
-                    email_sent = news_summary.send_email(html_content, text_content)
+                    email_sent = news_summary._send_email(html_content, text_content)
                     if email_sent:
                         print("   ✓ Email would be sent (mocked successfully)")
                     else:
@@ -265,13 +267,15 @@ def test_with_custom_article_limit():
                     test_articles = articles[:limit]
                     
                     print(f"\nProcessing {len(test_articles)} articles...\n")
-                    articles_by_category = news_summary.process_articles(test_articles)
-                    
+                    articles_by_category, all_entities, _ = news_summary._process_articles(test_articles)
+
                     total = sum(len(arts) for arts in articles_by_category.values())
                     print(f"✓ Processed {total} articles\n")
-                    
+
                     # Generate and save
-                    html, text = news_summary.generate_email_content(articles_by_category)
+                    html, text = news_summary._generate_email_content(
+                        articles_by_category, all_entities, [], ''
+                    )
                     
                     with open('test_email_output_real.html', 'w', encoding='utf-8') as f:
                         f.write(html)

@@ -19,16 +19,14 @@ def setup_local_env():
         'https://feeds.bbci.co.uk/news/rss.xml,https://techcrunch.com/feed/'
     )
     
-    # Email configuration (REQUIRED for email sending)
-    os.environ['EMAIL_RECIPIENTS'] = os.getenv(
-        'EMAIL_RECIPIENTS',
-        'your-email@example.com'  # Change this to your email
-    )
-    
-    os.environ['SENDER_EMAIL'] = os.getenv(
-        'SENDER_EMAIL',
-        'sender@example.com'  # Change this to your verified SES email
-    )
+    # Email configuration — must be set as real env vars before running test 5
+    recipients = os.getenv('EMAIL_RECIPIENTS')
+    sender     = os.getenv('SENDER_EMAIL')
+    if not recipients or not sender or 'example.com' in (recipients + sender):
+        print("WARNING: EMAIL_RECIPIENTS and SENDER_EMAIL must be set to real verified SES addresses.")
+        print("         Test 5 (email send) will be skipped if they are not set.\n")
+    os.environ['EMAIL_RECIPIENTS'] = recipients or ''
+    os.environ['SENDER_EMAIL']     = sender     or ''
     
     # AWS Region
     os.environ['AWS_REGION'] = os.getenv('AWS_REGION', 'us-east-1')
@@ -133,7 +131,7 @@ def test_comprehend_analysis():
         
         print(f"\nAnalyzing sample text ({len(sample_text)} chars)...\n")
         
-        analysis = news_summary.analyze_article_with_comprehend(sample_text)
+        analysis = news_summary._analyze_article(sample_text)
         
         print(f"✓ Analysis complete:")
         print(f"  Sentiment: {analysis['sentiment']}")
@@ -170,14 +168,16 @@ def test_full_pipeline(without_email=True):
         # Process first 3 articles only (to save time/API calls)
         print("\n2. Processing articles (limiting to 3 for testing)...")
         limited_articles = articles[:3]
-        articles_by_category = news_summary.process_articles(limited_articles)
-        
+        articles_by_category, all_entities, all_processed = news_summary._process_articles(limited_articles)
+
         total_processed = sum(len(arts) for arts in articles_by_category.values())
         print(f"   ✓ Processed {total_processed} articles into {len(articles_by_category)} categories")
-        
+
         # Generate email content
         print("\n3. Generating email content...")
-        html_content, text_content = news_summary.generate_email_content(articles_by_category)
+        html_content, text_content = news_summary._generate_email_content(
+            articles_by_category, all_entities, [], ''
+        )
         print(f"   ✓ Generated HTML ({len(html_content)} chars)")
         print(f"   ✓ Generated text ({len(text_content)} chars)")
         

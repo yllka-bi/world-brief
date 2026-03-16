@@ -32,4 +32,5 @@ module "lambda" {
   rss_feed_urls    = var.rss_feed_urls
   email_recipients = var.email_recipients
   sender_email     = var.sender_email
+  bedrock_model_id = var.bedrock_model_id
 }

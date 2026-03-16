@@ -28,6 +28,10 @@ build/
 node_modules/
 npm-debug.log*
 
+# Test output artifacts
+test_email_output*.html
+test_email_output*.txt
+
 # Editor
 .DS_Store
 .idea/

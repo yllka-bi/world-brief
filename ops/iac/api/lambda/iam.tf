@@ -41,8 +41,10 @@ resource "aws_iam_role_policy" "daily_news_lambda" {
         Action = [
           "comprehend:DetectSentiment",
           "comprehend:DetectKeyPhrases",
+          "comprehend:DetectEntities",
           "comprehend:BatchDetectSentiment",
-          "comprehend:BatchDetectKeyPhrases"
+          "comprehend:BatchDetectKeyPhrases",
+          "comprehend:BatchDetectEntities"
         ]
         Resource = "*"
       },
@@ -54,6 +56,27 @@ resource "aws_iam_role_policy" "daily_news_lambda" {
           "ses:SendRawEmail"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "AmazonBedrockAccess"
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "DynamoDBEntityTrends"
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:Scan",
+          "dynamodb:Query"
+        ]
+        Resource = "arn:aws:dynamodb:${var.aws_region}:*:table/${var.project_name}-entity-trends-${var.environment}"
       },
       {
         Sid    = "ReadSecretsManager"

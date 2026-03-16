@@ -1,6 +1,9 @@
 terraform {
   required_providers {
-    aws = "~> 6"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
   backend "s3" {
     key = "ops/cicd/terraform.tfstate"
@@ -62,7 +65,7 @@ module "cicd_terraform_api" {
   aws_region                  = var.aws_region
   bucket_name                 = "${var.project_name}-api-${var.aws_region}-bucket-${var.environment}"
   build_name                  = "${var.project_name}-api-${var.environment}"
-  buildspec_file_path         = "./ops/iac/api/buildspec.yml" # 
+  buildspec_file_path         = "./ops/iac/api/buildspec.yml"
   codebuild_compute_image     = "aws/codebuild/standard:7.0"
   codebuild_compute_size      = "BUILD_GENERAL1_MEDIUM"
   codebuild_compute_type      = "LINUX_CONTAINER"

@@ -33,11 +33,12 @@ resource "aws_lambda_function" "daily_news" {
 
   environment {
     variables = {
-      AWS_REGION       = var.aws_region
       RSS_FEED_URLS    = var.rss_feed_urls
       EMAIL_RECIPIENTS = var.email_recipients
       SENDER_EMAIL     = var.sender_email
       SCRAPERAPI_KEY   = jsondecode(data.aws_secretsmanager_secret_version.serpapi.secret_string)["SCRAPERAPI_KEY"]
+      BEDROCK_MODEL_ID = var.bedrock_model_id
+      DYNAMODB_TABLE   = aws_dynamodb_table.entity_trends.name
     }
   }
 
@@ -45,6 +46,32 @@ resource "aws_lambda_function" "daily_news" {
     aws_cloudwatch_log_group.daily_news_lambda,
     aws_iam_role_policy.daily_news_lambda
   ]
+}
+
+#####################################################
+# DYNAMODB - Entity Trend Tracking
+#####################################################
+
+resource "aws_dynamodb_table" "entity_trends" {
+  name         = "${var.project_name}-entity-trends-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "entity"
+  range_key    = "date"
+
+  attribute {
+    name = "entity"
+    type = "S"
+  }
+
+  attribute {
+    name = "date"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "expires_at"
+    enabled        = true
+  }
 }
 
 #####################################################

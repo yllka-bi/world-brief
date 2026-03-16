@@ -31,13 +31,14 @@ def quick_test():
             print(f"   Source: {article['source']}")
             print(f"   URL: {article['url'][:80]}...")
         
-        # Show categorization
+        # Show keyword-based categorization (fallback, no AWS needed)
         print("\n" + "=" * 60)
-        print("Testing categorization:")
+        print("Testing keyword categorization (fallback):")
         print("=" * 60)
-        
+
         for article in articles[:3]:
-            category = news_summary.categorize_article(article)
+            text     = article.get('title', '') + ' ' + article.get('description', '')
+            category = news_summary._keyword_category(text)
             print(f"\nArticle: {article['title'][:50]}...")
             print(f"Category: {category}")
     else:

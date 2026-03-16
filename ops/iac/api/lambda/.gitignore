@@ -1,4 +1,2 @@
-# Generated Lambda layer files
-layer/
-lambda-layer.zip
-scraper.zip 
+# Lambda deployment artifact — rebuilt by buildspec.yml / rsync before every terraform apply
+build_daily_news/

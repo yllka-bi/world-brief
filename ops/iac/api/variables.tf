@@ -4,6 +4,12 @@ variable "environment" {}
 variable "log_retention" {}
 variable "project_name" {}
 
+variable "bedrock_model_id" {
+  description = "Amazon Bedrock model ID for abstractive summarization"
+  type        = string
+  default     = "amazon.nova-lite-v1:0"
+}
+
 # Daily News Summary variables
 variable "rss_feed_urls" {
   description = "Comma-separated list of RSS feed URLs"
