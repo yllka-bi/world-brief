@@ -10,6 +10,11 @@ variable "codebuild_compute_type" {}
 variable "codebuild_source_type" { default = "" }
 variable "codebuild_source_version" { default = "" }
 variable "codestar_connection" {}
+variable "connection_arn" {
+  description = "Optional. Use existing CodeConnections/CodeStar connection ARN instead of creating one."
+  type        = string
+  default     = ""
+}
 variable "environment" {}
 variable "pipeline_name" {}
 variable "project_build_artifact_type" {}

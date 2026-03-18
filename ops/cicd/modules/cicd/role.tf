@@ -60,7 +60,7 @@ resource "aws_iam_role_policy" "project_role_policy" {
       {
         Effect = "Allow",
         Action = "codestar-connections:UseConnection",
-        Resource = "${aws_codestarconnections_connection.connection.arn}"
+        Resource = local.connection_arn
       }
     ]
   })

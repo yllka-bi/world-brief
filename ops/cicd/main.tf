@@ -44,6 +44,7 @@ module "cicd_terraform_iac" {
   codebuild_compute_size      = "BUILD_GENERAL1_MEDIUM"
   codebuild_compute_type      = "LINUX_CONTAINER"
   codestar_connection         = "${var.project_name}-ops-gc-${var.environment}"
+  connection_arn              = var.connection_arn
   environment                 = var.environment
   pipeline_name               = "${var.project_name}-ops-pipeline-${var.environment}"
   project_build_artifact_type = "CODEPIPELINE"
@@ -70,6 +71,7 @@ module "cicd_terraform_api" {
   codebuild_compute_size      = "BUILD_GENERAL1_MEDIUM"
   codebuild_compute_type      = "LINUX_CONTAINER"
   codestar_connection         = "${var.project_name}-api-gc-${var.environment}"
+  connection_arn              = var.connection_arn
   environment                 = var.environment
   pipeline_name               = "${var.project_name}-api-pipeline-${var.environment}"
   project_build_artifact_type = "CODEPIPELINE"

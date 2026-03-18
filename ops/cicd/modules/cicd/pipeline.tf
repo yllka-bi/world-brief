@@ -1,7 +1,11 @@
 resource "aws_codestarconnections_connection" "connection" {
+  count         = var.connection_arn != "" ? 0 : 1
   name          = var.codestar_connection
   provider_type = var.provider_type
+}
 
+locals {
+  connection_arn = var.connection_arn != "" ? var.connection_arn : aws_codestarconnections_connection.connection[0].arn
 }
 
 resource "aws_codepipeline" "infrastructure_pipeline" {
@@ -32,7 +36,7 @@ resource "aws_codepipeline" "infrastructure_pipeline" {
       output_artifacts = ["SourceOutput"]
 
       configuration = {
-        ConnectionArn    = aws_codestarconnections_connection.connection.arn
+        ConnectionArn    = local.connection_arn
         FullRepositoryId = var.repository_path
         BranchName       = var.repository_branch
         DetectChanges    = true
