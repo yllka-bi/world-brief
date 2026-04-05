@@ -37,7 +37,7 @@ phases:
         DAILY_NEWS_BUILD=$LAMBDA_MOD/build_daily_news
         rm -rf "$DAILY_NEWS_BUILD" && mkdir -p "$DAILY_NEWS_BUILD"
         rsync -a --exclude '__pycache__' --exclude '*.pyc' --exclude '.venv' --exclude '.env' --exclude 'tests*' "$DAILY_NEWS_SRC/" "$DAILY_NEWS_BUILD/"
-        python3 -m pip install -r "$DAILY_NEWS_SRC/requirements.txt" -t "$DAILY_NEWS_BUILD" --platform linux_x86_64 --implementation cp --python-version 3.12 --only-binary=:all: --upgrade --quiet --disable-pip-version-check
+        python3 -m pip install -r "$DAILY_NEWS_SRC/requirements.txt" -t "$DAILY_NEWS_BUILD" --upgrade --quiet --disable-pip-version-check
       - cd ./ops/iac/api
       - terraform init -reconfigure -backend-config=bucket=world-brief-${ENVIRONMENT}-state
       - terraform apply -input=false -var-file="../../configs/$ENVIRONMENT.tfvars" -auto-approve

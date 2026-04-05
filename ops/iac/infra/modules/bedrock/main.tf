@@ -114,6 +114,8 @@ resource "aws_opensearchserverless_access_policy" "forex_kb" {
       ],
       Principal = [
         aws_iam_role.bedrock_execution_role.arn,
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/${var.project_name}_ops_project_role-${var.environment}",
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.project_name}-deployment-user-${var.environment}",
         data.aws_caller_identity.this.arn
       ]
     }
