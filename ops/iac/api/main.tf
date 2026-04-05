@@ -8,10 +8,6 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.2"
     }
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 3.0"
-    }
   }
   backend "s3" {
     key    = "ops/iac/api/terraform.tfstate"

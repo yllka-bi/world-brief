@@ -8,5 +8,4 @@ variable "map_migrated_tag" {}
 variable "project_name" {}
 variable "provider_type" {}
 variable "repository_branch" {}
-variable "retention_in_days" {}
 variable "terraform_state_bucket" {}

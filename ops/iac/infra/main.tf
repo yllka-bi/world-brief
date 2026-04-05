@@ -29,21 +29,10 @@ module "vpc" {
   availability_zones = data.aws_availability_zones.available.names
 }
 
-module "s3_raw" {
-  source = "./modules/s3_raw/"
-
-  aws_region        = var.aws_region
-  environment       = var.environment
-  project_name      = var.project_name
-  aws_account_id    = var.aws_account_id
-  retention_in_days = var.retention_in_days
-}
-
 module "bedrock" {
   source = "./modules/bedrock/"
 
   environment            = var.environment
   kb_oss_collection_name = var.kb_oss_collection_name
   project_name           = var.project_name
-  s3_file_storage        = module.s3_raw.s3_file_storage
 }

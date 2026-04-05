@@ -11,10 +11,3 @@ resource "aws_ssm_parameter" "bedrock_kb_id" {
   type        = "String"
   value       = aws_bedrockagent_knowledge_base.bedrock_kb.id
 }
-
-resource "aws_ssm_parameter" "bedrock_data_source_id" {
-  name        = "/${var.project_name}/${var.environment}/bedrock/data_source_id"
-  description = "Bedrock Knowledge Base Data Source ID"
-  type        = "String"
-  value       = aws_bedrockagent_data_source.example.data_source_id
-}

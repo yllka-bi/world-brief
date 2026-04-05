@@ -6,18 +6,6 @@ resource "aws_iam_policy" "bedrock_combined_policy" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "S3BucketStatement",
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:ListBucket",
-          "s3:GetObject"
-        ],
-        "Resource" : [
-          "${var.s3_file_storage}",
-          "${var.s3_file_storage}/*"
-        ],
-      },
-      {
         "Sid" : "OpenSearchServerlessAPIAccessAllStatement",
         "Effect" : "Allow",
         "Action" : [

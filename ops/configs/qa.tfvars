@@ -8,7 +8,6 @@ project_name   = "world-brief"
 enable_nat_gateway       = false
 kb_oss_collection_name  = "world-brief-qa-kb"
 map_migrated_tag        = "d-server-12345678"
-retention_in_days       = 30
 terraform_state_bucket  = "world-brief-qa-state"
 provider_type           = "GitHub"
 repository_branch       = "main"

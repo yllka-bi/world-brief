@@ -39,17 +39,6 @@ resource "aws_bedrockagent_knowledge_base" "bedrock_kb" {
     aws_iam_role_policy_attachment.bedrock_policy_attachment
   ]
 }
-resource "aws_bedrockagent_data_source" "example" {
-  knowledge_base_id = aws_bedrockagent_knowledge_base.bedrock_kb.id
-  name              = "${aws_bedrockagent_knowledge_base.bedrock_kb.name}-data-source"
-  data_source_configuration {
-    type = "S3"
-    s3_configuration {
-      bucket_arn = var.s3_file_storage
-    }
-  }
-  data_deletion_policy = "RETAIN"
-}
 
 resource "aws_opensearchserverless_security_policy" "forex_kb_encryption" {
   name = var.kb_oss_collection_name
