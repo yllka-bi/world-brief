@@ -1,4 +1,4 @@
-aws_account_id = "796973508449"
+aws_account_id = "082455449324"
 aws_region     = "us-east-1"
 environment    = "qa"
 log_retention  = 14
